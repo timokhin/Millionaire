@@ -22,6 +22,8 @@ class ResultsViewController: BaseViewController {
         return tableView
     }()
     
+    private let formatter = DateFormatter()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -30,6 +32,7 @@ class ResultsViewController: BaseViewController {
         title = "Results"
         view.backgroundColor = .white
         tableView.backgroundColor = .white
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "ResultCell")
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -80,10 +83,8 @@ extension ResultsViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // @todo reuse cells, separate view and cells models
-        //let cell = tableView.dequeueReusableCell(withIdentifier: "ResultCell" , for: indexPath)
-        
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "ResultCell")
+
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ResultCell" , for: indexPath)
         
         guard let results = results else {return cell}
         
@@ -92,7 +93,6 @@ extension ResultsViewController: UITableViewDelegate, UITableViewDataSource {
         cell.backgroundColor = .white
         cell.textLabel?.text = String(format: "$%d", result.amount)
         cell.textLabel?.textColor = .black;
-        let formatter = DateFormatter()
         formatter.dateFormat = "MM.dd.yyyy 'at' HH:mm"
         cell.detailTextLabel?.text = formatter.string(from: result.date)
         cell.detailTextLabel?.textColor = .black
